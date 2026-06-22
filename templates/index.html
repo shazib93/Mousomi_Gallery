@@ -213,68 +213,8 @@
         <input type="tel" name="mobile" required placeholder="01XXXXXXXXX">
       </div>
       <div>
-        <label>জেলা *</label>
-        <select name="district" id="districtSelect" required onchange="updateThana()">
-          <option value="">জেলা নির্বাচন করুন</option>
-          <option value="ঢাকা">ঢাকা</option>
-          <option value="গাজীপুর">গাজীপুর</option>
-          <option value="নারায়ণগঞ্জ">নারায়ণগঞ্জ</option>
-          <option value="মানিকগঞ্জ">মানিকগঞ্জ</option>
-          <option value="মুন্সিগঞ্জ">মুন্সিগঞ্জ</option>
-          <option value="নরসিংদী">নরসিংদী</option>
-          <option value="কিশোরগঞ্জ">কিশোরগঞ্জ</option>
-          <option value="টাঙ্গাইল">টাঙ্গাইল</option>
-          <option value="চট্টগ্রাম">চট্টগ্রাম</option>
-          <option value="রাজশাহী">রাজশাহী</option>
-          <option value="খুলনা">খুলনা</option>
-          <option value="বরিশাল">বরিশাল</option>
-          <option value="সিলেট">সিলেট</option>
-          <option value="রংপুর">রংপুর</option>
-          <option value="ময়মনসিংহ">ময়মনসিংহ</option>
-          <option value="কুমিল্লা">কুমিল্লা</option>
-          <option value="নোয়াখালী">নোয়াখালী</option>
-          <option value="ফরিদপুর">ফরিদপুর</option>
-          <option value="মাদারীপুর">মাদারীপুর</option>
-          <option value="শরীয়তপুর">শরীয়তপুর</option>
-          <option value="গোপালগঞ্জ">গোপালগঞ্জ</option>
-          <option value="বগুড়া">বগুড়া</option>
-          <option value="জয়পুরহাট">জয়পুরহাট</option>
-          <option value="নওগাঁ">নওগাঁ</option>
-          <option value="নাটোর">নাটোর</option>
-          <option value="পাবনা">পাবনা</option>
-          <option value="সিরাজগঞ্জ">সিরাজগঞ্জ</option>
-          <option value="দিনাজপুর">দিনাজপুর</option>
-          <option value="ঠাকুরগাঁও">ঠাকুরগাঁও</option>
-          <option value="পঞ্চগড়">পঞ্চগড়</option>
-          <option value="নীলফামারী">নীলফামারী</option>
-          <option value="লালমনিরহাট">লালমনিরহাট</option>
-          <option value="কুড়িগ্রাম">কুড়িগ্রাম</option>
-          <option value="গাইবান্ধা">গাইবান্ধা</option>
-          <option value="যশোর">যশোর</option>
-          <option value="ঝিনাইদহ">ঝিনাইদহ</option>
-          <option value="মাগুরা">মাগুরা</option>
-          <option value="নড়াইল">নড়াইল</option>
-          <option value="বাগেরহাট">বাগেরহাট</option>
-          <option value="সাতক্ষীরা">সাতক্ষীরা</option>
-          <option value="কুষ্টিয়া">কুষ্টিয়া</option>
-          <option value="চুয়াডাঙ্গা">চুয়াডাঙ্গা</option>
-          <option value="মেহেরপুর">মেহেরপুর</option>
-          <option value="ব্রাহ্মণবাড়িয়া">ব্রাহ্মণবাড়িয়া</option>
-          <option value="চাঁদপুর">চাঁদপুর</option>
-          <option value="লক্ষ্মীপুর">লক্ষ্মীপুর</option>
-          <option value="ফেনী">ফেনী</option>
-          <option value="কক্সবাজার">কক্সবাজার</option>
-          <option value="রাঙ্গামাটি">রাঙ্গামাটি</option>
-          <option value="খাগড়াছড়ি">খাগড়াছড়ি</option>
-          <option value="বান্দরবান">বান্দরবান</option>
-          <option value="হবিগঞ্জ">হবিগঞ্জ</option>
-          <option value="মৌলভীবাজার">মৌলভীবাজার</option>
-          <option value="সুনামগঞ্জ">সুনামগঞ্জ</option>
-        </select>
-      </div>
-      <div>
-        <label>থানা *</label>
-        <input type="text" name="thana" id="thanaInput" required placeholder="থানার নাম লিখুন">
+        <label>ঠিকানা *</label>
+        <input type="text" name="thikana" required placeholder="জেলা, থানা, এলাকা">
       </div>
       <div>
         <label>এলাকা / গ্রাম / রাস্তা *</label>
@@ -286,20 +226,6 @@
       </div>
       <button type="submit" class="btn-submit">✅ অর্ডার কনফার্ম করুন</button>
     </form>
-  </div>
-</div>
-<!-- Cart Modal -->
-<div class="modal" id="cartModal">
-  <div class="modal-content">
-    <span class="modal-close" onclick="closeCart()">&times;</span>
-    <h4>🛒 আপনার কার্ট</h4>
-    <div id="cartItems" class="cart-summary">
-      <p style="color:#999;">কার্ট খালি</p>
-    </div>
-    <div id="cartTotal" style="display:none;">
-      <div class="cart-total">মোট: ৳<span id="totalAmount">0</span></div>
-      <button class="btn-submit" onclick="checkoutFromCart()" style="margin-top:10px;">📦 অর্ডার সম্পন্ন করুন</button>
-    </div>
   </div>
 </div>
 
@@ -443,56 +369,9 @@ function showToast(msg) {
 
 // ===== Close modals on outside click =====
 window.onclick = function(e) {
-  const modal = document.getElementById('orderModal');
-  const cartModal = document.getElementById('cartModal');
-  if (e.target === modal) closeModal();
-  if (e.target === cartModal) closeCart();
-}
-
-// ===== District to Thana (optional helper) =====
-function updateThana() {
-  // থানা ম্যানুয়াল—এখানে কিছু করো না
-}
-// ===== Checkout from Cart (সব পণ্য পাঠানো হবে) =====
-function checkoutFromCart() {
-  if (cart.length === 0) {
-    alert('কার্ট খালি!');
-    return;
+  if (e.target === document.getElementById("orderModal")) {
+    closeModal();
   }
-  
-  // ===== Cart থেকে Checkout (সব পণ্য পাঠানো হবে) =====
-function checkoutFromCart() {
-  if (cart.length === 0) {
-    alert('কার্ট খালি!');
-    return;
-  }
-  
-  // কার্টের ডেটা JSON-এ কনভার্ট করো
-  const productData = JSON.stringify(cart.map(item => ({
-    name: item.name,
-    price: item.price,
-    qty: item.qty
-  })));
-  
-  // ফর্মে সেট করো
-  document.getElementById('cart_product_data').value = productData;
-  
-  // কার্ট বন্ধ করো
-  closeCart();
-  
-  // অর্ডার মডাল খোলো (ইউজার বাকি তথ্য দিতে পারে)
-  document.getElementById('orderModal').style.display = 'flex';
-  
-  // পণ্যের নাম ডিসপ্লে করো
-  const productNames = cart.map(item => item.name + ' x' + item.qty).join(', ');
-  document.getElementById('product_display').value = productNames + ' (মোট ' + cart.reduce((sum, item) => sum + (item.price * item.qty), 0) + ' টাকা)';
-  document.getElementById('product_naam_input').value = productNames;
-}
-  // ফর্মে সেট করো
-  document.getElementById('cart_product_data').value = productData;
-  
-  // ফর্ম সাবমিট করো
-  document.getElementById('cartOrderForm').submit();
 }
 </script>
 </body>
