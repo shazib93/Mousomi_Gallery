@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mousumi's Gallery</title>
+  <title>Mousomi's Gallery</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Roboto,sans-serif; }
@@ -11,12 +11,15 @@
     .top-banner { background:#1a1a1a; color:#ccc; text-align:center; padding:8px 12px; font-size:0.8rem; letter-spacing:1px; }
     .top-banner a { color:#fff; margin:0 10px; }
     .main-header { display:flex; justify-content:space-between; align-items:center; padding:16px 30px; background:#fff; border-bottom:1px solid #eee; flex-wrap:wrap; }
-    .logo { font-size:1.8rem; font-weight:300; color:#2d2a24; }
+    .logo { font-size:1.8rem; font-weight:300; color:#2d2a24; cursor:pointer; }
     .logo span { font-weight:700; color:#d43f5a; }
+    .logo:hover { opacity:0.8; }
     .nav-links a { margin:0 14px; text-decoration:none; color:#2d2a24; font-weight:500; font-size:0.9rem; }
     .nav-links a:hover { color:#d43f5a; }
-    .nav-icons i { font-size:1.2rem; margin-left:16px; color:#2d2a24; cursor:pointer; }
+    .nav-icons { display:flex; align-items:center; gap:12px; }
+    .nav-icons i { font-size:1.2rem; color:#2d2a24; cursor:pointer; }
     .nav-icons i:hover { color:#d43f5a; }
+    .cart-badge { background:#d43f5a; color:#fff; border-radius:50%; padding:2px 8px; font-size:0.7rem; margin-left:-8px; }
     .hero { background:linear-gradient(145deg,#f4ede8,#e6dbd1); padding:50px 30px; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; }
     .hero-text { flex:1 1 280px; }
     .hero-text h1 { font-size:2.8rem; font-weight:300; line-height:1.2; }
@@ -46,10 +49,12 @@
     .product-card .price { color:#d43f5a; font-weight:700; font-size:1.1rem; }
     .product-card .old-price { text-decoration:line-through; color:#999; font-size:0.8rem; margin-left:8px; }
     .product-card .stock { font-size:0.75rem; color:#666; margin:2px 0; }
-    .order-btn { background:linear-gradient(135deg,#25D366,#128C7E); color:#fff; border:none; padding:10px 20px; border-radius:50px; margin-top:8px; font-weight:700; cursor:pointer; transition:0.3s; box-shadow:0 2px 12px rgba(37,211,102,0.3); }
+    .btn-group { display:flex; gap:6px; justify-content:center; margin-top:8px; flex-wrap:wrap; }
+    .order-btn { background:linear-gradient(135deg,#25D366,#128C7E); color:#fff; border:none; padding:8px 16px; border-radius:50px; font-weight:600; cursor:pointer; transition:0.3s; box-shadow:0 2px 12px rgba(37,211,102,0.3); font-size:0.8rem; }
     .order-btn:hover { transform:scale(1.05); box-shadow:0 4px 20px rgba(37,211,102,0.5); }
+    .cart-btn { background:linear-gradient(135deg,#ff6b6b,#c0392b); color:#fff; border:none; padding:8px 16px; border-radius:50px; font-weight:600; cursor:pointer; transition:0.3s; box-shadow:0 2px 12px rgba(255,107,107,0.3); font-size:0.8rem; }
+    .cart-btn:hover { transform:scale(1.05); box-shadow:0 4px 20px rgba(255,107,107,0.5); }
     .rating { color:#FFD700; font-size:0.9rem; margin:4px 0; }
-    .rating .half { color:#ddd; }
     .newsletter { background:#2d2a24; color:#f4ede8; padding:50px 30px; text-align:center; }
     .newsletter h2 { font-weight:300; font-size:2rem; }
     .newsletter h2 strong { color:#d43f5a; font-weight:600; }
@@ -63,7 +68,7 @@
     footer a { color:#aaa; display:block; text-decoration:none; margin:6px 0; font-size:0.9rem; }
     footer a:hover { color:#fff; }
     .payment-methods { display:flex; gap:15px; margin:10px 0; flex-wrap:wrap; }
-    .payment-methods img { height:30px; background:#fff; padding:4px 12px; border-radius:8px; }
+    .payment-methods span { background:#f5f0eb; padding:4px 12px; border-radius:6px; }
     .copyright { text-align:center; padding:20px 0 0; border-top:1px solid #333; margin-top:20px; width:100%; font-size:0.8rem; color:#666; }
     .social i { font-size:1.4rem; margin-right:14px; color:#aaa; transition:0.2s; }
     .social i:hover { color:#d43f5a; }
@@ -71,7 +76,7 @@
     .whatsapp-fixed:hover { background:#1da851; color:#fff; }
     .alert-success { background:#d4edda; color:#155724; padding:15px; border-radius:10px; margin:15px 30px; text-align:center; border-left:5px solid #28a745; }
     .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center; }
-    .modal-content { background:#fff; max-width:450px; width:90%; border-radius:20px; padding:30px; position:relative; box-shadow:0 20px 60px rgba(0,0,0,0.2); }
+    .modal-content { background:#fff; max-width:550px; width:95%; border-radius:20px; padding:30px; position:relative; box-shadow:0 20px 60px rgba(0,0,0,0.2); max-height:90vh; overflow-y:auto; }
     .modal-close { position:absolute; top:15px; right:20px; font-size:1.8rem; cursor:pointer; color:#999; transition:0.2s; }
     .modal-close:hover { color:#d43f5a; transform:rotate(90deg); }
     .modal h4 { color:#d43f5a; margin-bottom:15px; font-size:1.3rem; }
@@ -80,6 +85,10 @@
     .modal input:focus, .modal select:focus, .modal textarea:focus { border-color:#d43f5a; outline:none; box-shadow:0 0 0 3px rgba(212,63,90,0.1); }
     .modal .btn-submit { width:100%; padding:14px; background:linear-gradient(135deg,#d43f5a,#b02c44); color:#fff; border:none; border-radius:50px; font-weight:700; font-size:1rem; cursor:pointer; transition:0.2s; }
     .modal .btn-submit:hover { transform:scale(1.02); box-shadow:0 4px 20px rgba(212,63,90,0.3); }
+    .cart-summary { background:#f8f4f0; border-radius:12px; padding:15px; margin:10px 0; }
+    .cart-item { display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid #eee; }
+    .cart-total { font-weight:700; color:#d43f5a; font-size:1.1rem; text-align:right; margin-top:8px; }
+    .district-select { width:100%; padding:12px 16px; border:1px solid #e0d6cc; border-radius:30px; margin-top:4px; margin-bottom:12px; font-size:0.95rem; background:#fcf8f5; }
     @media (max-width:700px) { .main-header { flex-direction:column; gap:12px; } .nav-links a { margin:0 10px; font-size:0.8rem; } .hero-text h1 { font-size:2rem; } .product-grid { grid-template-columns:repeat(2,1fr); gap:12px; padding:10px; } }
   </style>
 </head>
@@ -88,13 +97,11 @@
 <!-- Top Banner -->
 <div class="top-banner">
   ✨ ফ্রি ডেলিভারি – অর্ডার করুন এখনই! ✨
-  <a href="#">অর্ডার ট্র্যাক</a> |
-  <a href="#">হেল্প</a>
 </div>
 
 <!-- Header -->
 <div class="main-header">
-  <div class="logo">Mousumi's <span>Gallery</span></div>
+  <div class="logo" onclick="window.location.href='/'">Mousomi's <span>Gallery</span></div>
   <div class="nav-links">
     <a href="/">হোম</a>
     <a href="/?cat=পোশাক">পোশাক</a>
@@ -105,7 +112,8 @@
   <div class="nav-icons">
     <i class="fas fa-search"></i>
     <i class="fas fa-heart"></i>
-    <i class="fas fa-shopping-bag"></i>
+    <i class="fas fa-shopping-cart" onclick="openCart()"></i>
+    <span class="cart-badge" id="cartCount">0</span>
   </div>
 </div>
 
@@ -113,8 +121,8 @@
 <div class="hero">
   <div class="hero-text">
     <h1>ঋতুর <strong>সৌন্দর্য</strong><br>তোমার হাতে</h1>
-    <p>হ্যান্ডপিকড ফ্যাশন, গহনা ও লাইফস্টাইল প্রোডাক্ট – শুধু Mousumi's Gallery-তে।</p>
-    <a href="#" class="btn">শপিং শুরু করো <i class="fas fa-arrow-right"></i></a>
+    <p>হ্যান্ডপিকড ফ্যাশন, গহনা ও লাইফস্টাইল প্রোডাক্ট – শুধু Mousomi's Gallery-তে।</p>
+    <a href="#products" class="btn">শপিং শুরু করো <i class="fas fa-arrow-right"></i></a>
   </div>
   <div class="hero-image">
     <i class="fas fa-crown"></i> ২০২৬ কালেকশন
@@ -125,7 +133,7 @@
 {% if success %}
 <div class="alert-success">
   ✅ আপনার অর্ডার গৃহীত হয়েছে! <br>
-  <small>বিল ডাউনলোড করতে অ্যাডমিন প্যানেলে যান</small>
+  আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব। ধন্যবাদ!
 </div>
 {% endif %}
 
@@ -138,11 +146,11 @@
 </div>
 
 <!-- Products -->
-<h2 class="section-title">এই সপ্তাহের <span>বেস্টসেলার</span></h2>
+<h2 class="section-title" id="products">এই সপ্তাহের <span>বেস্ট কালেকশন</span></h2>
 <div class="product-grid">
   {% if products %}
     {% for p in products %}
-    <div class="product-card">
+    <div class="product-card" data-id="{{ p.id }}" data-name="{{ p.naam }}" data-price="{{ p.price }}" data-image="{{ p.image_url }}">
       <div class="product-img">
         <img src="{{ p.image_url }}" alt="{{ p.naam }}" onerror="this.src='https://placehold.co/300x220/f4ede8/d43f5a?text=No+Image'">
         {% if p.discount > 0 %}
@@ -161,7 +169,10 @@
       </div>
       <div class="stock">📦 স্টোক: {{ p.stock }} পিস</div>
       {% if p.stock > 0 %}
-      <button class="order-btn" onclick="openOrder('{{ p.naam }}', {{ p.price }})">💬 অর্ডার করুন</button>
+      <div class="btn-group">
+        <button class="order-btn" onclick="openOrder('{{ p.naam }}', {{ p.price }})">💬 অর্ডার</button>
+        <button class="cart-btn" onclick="addToCart('{{ p.id }}','{{ p.naam }}',{{ p.price }})">🛒 Cart-এ যোগ</button>
+      </div>
       {% else %}
       <button class="order-btn" style="background:#ccc;cursor:not-allowed;">🚫 আউট অফ স্টোক</button>
       {% endif %}
@@ -179,8 +190,16 @@
   <div class="modal-content">
     <span class="modal-close" onclick="closeModal()">&times;</span>
     <h4>📝 অর্ডার করুন</h4>
-    <form method="POST" action="/order">
+    
+    <!-- ✅ আপডেটেড ফর্ম (Cart-এর ডেটাও পাঠাবে) -->
+    <form method="POST" action="/order" id="mainOrderForm">
+      
+      <!-- সিঙ্গেল প্রোডাক্ট অর্ডারের জন্য -->
       <input type="hidden" name="product_naam" id="product_naam_input">
+      
+      <!-- Cart-এর সব প্রোডাক্ট পাঠানোর জন্য -->
+      <input type="hidden" name="product_data" id="cart_product_data" value="[]">
+      
       <div>
         <label>পণ্য</label>
         <input type="text" id="product_display" readonly style="background:#f0ebe6;">
@@ -194,15 +213,72 @@
         <input type="tel" name="mobile" required placeholder="01XXXXXXXXX">
       </div>
       <div>
-        <label>ঠিকানা *</label>
-        <input type="text" name="thikana" required placeholder="জেলা, থানা, এলাকা">
+        <label>জেলা *</label>
+        <select name="district" id="districtSelect" required onchange="updateThana()">
+          <option value="">জেলা নির্বাচন করুন</option>
+          <option value="ঢাকা">ঢাকা</option>
+          <option value="গাজীপুর">গাজীপুর</option>
+          <option value="নারায়ণগঞ্জ">নারায়ণগঞ্জ</option>
+          <option value="মানিকগঞ্জ">মানিকগঞ্জ</option>
+          <option value="মুন্সিগঞ্জ">মুন্সিগঞ্জ</option>
+          <option value="নরসিংদী">নরসিংদী</option>
+          <option value="কিশোরগঞ্জ">কিশোরগঞ্জ</option>
+          <option value="টাঙ্গাইল">টাঙ্গাইল</option>
+          <option value="চট্টগ্রাম">চট্টগ্রাম</option>
+          <option value="রাজশাহী">রাজশাহী</option>
+          <option value="খুলনা">খুলনা</option>
+          <option value="বরিশাল">বরিশাল</option>
+          <option value="সিলেট">সিলেট</option>
+          <option value="রংপুর">রংপুর</option>
+          <option value="ময়মনসিংহ">ময়মনসিংহ</option>
+          <option value="কুমিল্লা">কুমিল্লা</option>
+          <option value="নোয়াখালী">নোয়াখালী</option>
+          <option value="ফরিদপুর">ফরিদপুর</option>
+          <option value="মাদারীপুর">মাদারীপুর</option>
+          <option value="শরীয়তপুর">শরীয়তপুর</option>
+          <option value="গোপালগঞ্জ">গোপালগঞ্জ</option>
+          <option value="বগুড়া">বগুড়া</option>
+          <option value="জয়পুরহাট">জয়পুরহাট</option>
+          <option value="নওগাঁ">নওগাঁ</option>
+          <option value="নাটোর">নাটোর</option>
+          <option value="পাবনা">পাবনা</option>
+          <option value="সিরাজগঞ্জ">সিরাজগঞ্জ</option>
+          <option value="দিনাজপুর">দিনাজপুর</option>
+          <option value="ঠাকুরগাঁও">ঠাকুরগাঁও</option>
+          <option value="পঞ্চগড়">পঞ্চগড়</option>
+          <option value="নীলফামারী">নীলফামারী</option>
+          <option value="লালমনিরহাট">লালমনিরহাট</option>
+          <option value="কুড়িগ্রাম">কুড়িগ্রাম</option>
+          <option value="গাইবান্ধা">গাইবান্ধা</option>
+          <option value="যশোর">যশোর</option>
+          <option value="ঝিনাইদহ">ঝিনাইদহ</option>
+          <option value="মাগুরা">মাগুরা</option>
+          <option value="নড়াইল">নড়াইল</option>
+          <option value="বাগেরহাট">বাগেরহাট</option>
+          <option value="সাতক্ষীরা">সাতক্ষীরা</option>
+          <option value="কুষ্টিয়া">কুষ্টিয়া</option>
+          <option value="চুয়াডাঙ্গা">চুয়াডাঙ্গা</option>
+          <option value="মেহেরপুর">মেহেরপুর</option>
+          <option value="ব্রাহ্মণবাড়িয়া">ব্রাহ্মণবাড়িয়া</option>
+          <option value="চাঁদপুর">চাঁদপুর</option>
+          <option value="লক্ষ্মীপুর">লক্ষ্মীপুর</option>
+          <option value="ফেনী">ফেনী</option>
+          <option value="কক্সবাজার">কক্সবাজার</option>
+          <option value="রাঙ্গামাটি">রাঙ্গামাটি</option>
+          <option value="খাগড়াছড়ি">খাগড়াছড়ি</option>
+          <option value="বান্দরবান">বান্দরবান</option>
+          <option value="হবিগঞ্জ">হবিগঞ্জ</option>
+          <option value="মৌলভীবাজার">মৌলভীবাজার</option>
+          <option value="সুনামগঞ্জ">সুনামগঞ্জ</option>
+        </select>
       </div>
       <div>
-        <label>ডেলিভারি এলাকা *</label>
-        <select name="delivery_area" required>
-          <option value="ঢাকার ভেতরে">ঢাকার ভেতরে (চার্জ ৮০ টাকা)</option>
-          <option value="ঢাকার বাইরে">ঢাকার বাইরে (চার্জ ১২০ টাকা)</option>
-        </select>
+        <label>থানা *</label>
+        <input type="text" name="thana" id="thanaInput" required placeholder="থানার নাম লিখুন">
+      </div>
+      <div>
+        <label>এলাকা / গ্রাম / রাস্তা *</label>
+        <input type="text" name="area" required placeholder="এলাকার নাম লিখুন">
       </div>
       <div>
         <label>নোট</label>
@@ -210,6 +286,20 @@
       </div>
       <button type="submit" class="btn-submit">✅ অর্ডার কনফার্ম করুন</button>
     </form>
+  </div>
+</div>
+<!-- Cart Modal -->
+<div class="modal" id="cartModal">
+  <div class="modal-content">
+    <span class="modal-close" onclick="closeCart()">&times;</span>
+    <h4>🛒 আপনার কার্ট</h4>
+    <div id="cartItems" class="cart-summary">
+      <p style="color:#999;">কার্ট খালি</p>
+    </div>
+    <div id="cartTotal" style="display:none;">
+      <div class="cart-total">মোট: ৳<span id="totalAmount">0</span></div>
+      <button class="btn-submit" onclick="checkoutFromCart()" style="margin-top:10px;">📦 অর্ডার সম্পন্ন করুন</button>
+    </div>
   </div>
 </div>
 
@@ -225,7 +315,7 @@
 <!-- Footer -->
 <footer>
   <div class="col">
-    <h4>Mousumi's Gallery</h4>
+    <h4>Mousomi's Gallery</h4>
     <a href="#">আমাদের সম্পর্কে</a>
     <a href="#">ক্যারিয়ার</a>
     <a href="#">ব্লগ</a>
@@ -246,13 +336,13 @@
       <i class="fab fa-youtube"></i>
     </div>
     <div class="payment-methods">
-      <span style="background:#f5f0eb;padding:4px 12px;border-radius:6px;">bKash</span>
-      <span style="background:#f5f0eb;padding:4px 12px;border-radius:6px;">Nagad</span>
-      <span style="background:#f5f0eb;padding:4px 12px;border-radius:6px;">Rocket</span>
+      <span>bKash</span>
+      <span>Nagad</span>
+      <span>Rocket</span>
     </div>
   </div>
   <div class="copyright">
-    &copy; ২০২৬ Mousumi's Gallery – সর্বস্বত্ব সংরক্ষিত
+    &copy; ২০২৬ Mousomi's Gallery – সর্বস্বত্ব সংরক্ষিত
   </div>
 </footer>
 
@@ -260,18 +350,149 @@
 <a href="https://wa.me/8801673963852" class="whatsapp-fixed">💬 WhatsApp</a>
 
 <script>
-function openOrder(naam, price) {
-  document.getElementById("product_naam_input").value = naam;
-  document.getElementById("product_display").value = naam + " — ৳" + price;
-  document.getElementById("orderModal").style.display = "flex";
-}
-function closeModal() {
-  document.getElementById("orderModal").style.display = "none";
-}
-window.onclick = function(e) {
-  if (e.target === document.getElementById("orderModal")) {
-    closeModal();
+// ===== Cart System =====
+let cart = [];
+
+function addToCart(id, name, price) {
+  const existing = cart.find(item => item.id === id);
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    cart.push({ id, name, price, qty: 1 });
   }
+  updateCartUI();
+  showToast('🛒 ' + name + ' কার্টে যোগ হয়েছে!');
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(item => item.id !== id);
+  updateCartUI();
+}
+
+function updateCartUI() {
+  const count = cart.reduce((sum, item) => sum + item.qty, 0);
+  document.getElementById('cartCount').textContent = count;
+  
+  const container = document.getElementById('cartItems');
+  const totalSpan = document.getElementById('totalAmount');
+  
+  if (cart.length === 0) {
+    container.innerHTML = '<p style="color:#999;">কার্ট খালি</p>';
+    document.getElementById('cartTotal').style.display = 'none';
+    return;
+  }
+  
+  let html = '';
+  let total = 0;
+  cart.forEach(item => {
+    const subtotal = item.price * item.qty;
+    total += subtotal;
+    html += `<div class="cart-item">
+      <span>${item.name} x ${item.qty}</span>
+      <span>৳${subtotal} <button onclick="removeFromCart('${item.id}')" style="background:red;color:#fff;border:none;border-radius:50%;width:20px;height:20px;cursor:pointer;font-size:0.7rem;">✕</button></span>
+    </div>`;
+  });
+  container.innerHTML = html;
+  document.getElementById('cartTotal').style.display = 'block';
+  totalSpan.textContent = total;
+}
+
+function openCart() {
+  document.getElementById('cartModal').style.display = 'flex';
+}
+
+function closeCart() {
+  document.getElementById('cartModal').style.display = 'none';
+}
+
+function checkoutFromCart() {
+  if (cart.length === 0) {
+    alert('কার্ট খালি!');
+    return;
+  }
+  // প্রথম পণ্য দিয়ে অর্ডার ফর্ম পপুলেট করো
+  const first = cart[0];
+  openOrder(first.name, first.price);
+  closeCart();
+}
+
+// ===== Order Modal =====
+function openOrder(naam, price) {
+  document.getElementById('product_naam_input').value = naam;
+  document.getElementById('product_display').value = naam + ' — ৳' + price;
+  document.getElementById('orderModal').style.display = 'flex';
+}
+
+function closeModal() {
+  document.getElementById('orderModal').style.display = 'none';
+}
+
+// ===== Cart Modal Close =====
+function closeCart() {
+  document.getElementById('cartModal').style.display = 'none';
+}
+
+// ===== Toast Notification =====
+function showToast(msg) {
+  const toast = document.createElement('div');
+  toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#2d2a24;color:#fff;padding:12px 24px;border-radius:50px;z-index:9999;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,0.3);';
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 2500);
+}
+
+// ===== Close modals on outside click =====
+window.onclick = function(e) {
+  const modal = document.getElementById('orderModal');
+  const cartModal = document.getElementById('cartModal');
+  if (e.target === modal) closeModal();
+  if (e.target === cartModal) closeCart();
+}
+
+// ===== District to Thana (optional helper) =====
+function updateThana() {
+  // থানা ম্যানুয়াল—এখানে কিছু করো না
+}
+// ===== Checkout from Cart (সব পণ্য পাঠানো হবে) =====
+function checkoutFromCart() {
+  if (cart.length === 0) {
+    alert('কার্ট খালি!');
+    return;
+  }
+  
+  // ===== Cart থেকে Checkout (সব পণ্য পাঠানো হবে) =====
+function checkoutFromCart() {
+  if (cart.length === 0) {
+    alert('কার্ট খালি!');
+    return;
+  }
+  
+  // কার্টের ডেটা JSON-এ কনভার্ট করো
+  const productData = JSON.stringify(cart.map(item => ({
+    name: item.name,
+    price: item.price,
+    qty: item.qty
+  })));
+  
+  // ফর্মে সেট করো
+  document.getElementById('cart_product_data').value = productData;
+  
+  // কার্ট বন্ধ করো
+  closeCart();
+  
+  // অর্ডার মডাল খোলো (ইউজার বাকি তথ্য দিতে পারে)
+  document.getElementById('orderModal').style.display = 'flex';
+  
+  // পণ্যের নাম ডিসপ্লে করো
+  const productNames = cart.map(item => item.name + ' x' + item.qty).join(', ');
+  document.getElementById('product_display').value = productNames + ' (মোট ' + cart.reduce((sum, item) => sum + (item.price * item.qty), 0) + ' টাকা)';
+  document.getElementById('product_naam_input').value = productNames;
+}
+  // ফর্মে সেট করো
+  document.getElementById('cart_product_data').value = productData;
+  
+  // ফর্ম সাবমিট করো
+  document.getElementById('cartOrderForm').submit();
 }
 </script>
 </body>

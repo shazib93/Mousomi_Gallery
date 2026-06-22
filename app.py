@@ -1,12 +1,16 @@
-from flask import Flask, render_template, request, redirect, session, send_file
+from flask import Flask, render_template, request, redirect, session, send_file, jsonify
 import sqlite3
 from datetime import datetime
 import io
+import json
 
 app = Flask(__name__)
 app.secret_key = "mousumi2026"
 
 CATEGORIES = ["পোশাক", "গহনা", "কসমেটিক্স", "জুতা", "অন্যান্য"]
+
+# ঢাকার জেলাগুলোর তালিকা
+DHAKA_DISTRICTS = ["ঢাকা", "গাজীপুর", "নারায়ণগঞ্জ", "মানিকগঞ্জ", "মুন্সিগঞ্জ", "নরসিংদী", "কিশোরগঞ্জ", "টাঙ্গাইল"]
 
 def get_db():
     conn = sqlite3.connect("mousumi.db")
@@ -19,14 +23,14 @@ def get_db():
         stock INTEGER DEFAULT 10,
         discount INTEGER DEFAULT 0
     )""")
-    # ... বাকি কোড
-    # অর্ডার টেবিল – delivery_charge যোগ করা হলো
     conn.execute("""CREATE TABLE IF NOT EXISTS orders (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         customer_naam TEXT,
         mobile TEXT,
-        thikana TEXT,
-        product_naam TEXT,
+        district TEXT,
+        thana TEXT,
+        area TEXT,
+        product_list TEXT,
         note TEXT,
         order_date TEXT,
         delivery_charge INTEGER DEFAULT 0,
@@ -68,37 +72,48 @@ def index():
 def order():
     naam = request.form.get("naam", "")
     mobile = request.form.get("mobile", "")
-    thikana = request.form.get("thikana", "")
-    product_naam = request.form.get("product_naam", "")
+    district = request.form.get("district", "")
+    thana = request.form.get("thana", "")
+    area = request.form.get("area", "")
+    product_data = request.form.get("product_data", "[]")
     note = request.form.get("note", "")
-    delivery_area = request.form.get("delivery_area", "ঢাকার ভেতরে")
     
     # ডেলিভারি চার্জ নির্ধারণ
-    if delivery_area == "ঢাকার ভেতরে":
+    if district in DHAKA_DISTRICTS:
         delivery_charge = 80
     else:
         delivery_charge = 120
     
-    # পণ্যের দাম বের করা
-    conn = get_db()
-    cur = conn.cursor()
-    cur.execute("SELECT price FROM products WHERE naam=?", (product_naam,))
-    row = cur.fetchone()
-    product_price = row[0] if row else 0
-    total = product_price + delivery_charge
+    # পণ্যের তালিকা পার্স করা
+    try:
+        products = json.loads(product_data)
+    except:
+        products = []
+    
+    # মোট দাম বের করা
+    total = sum(p.get('price', 0) * p.get('qty', 1) for p in products) + delivery_charge
+    
+    # পণ্যের নামের তালিকা
+    product_names = ", ".join([p.get('name', '') for p in products])
     
     # বিল নম্বর জেনারেশন
     bill_number = "MG-" + datetime.now().strftime("%Y%m%d-%H%M%S")
     
-    conn.execute("INSERT INTO orders (customer_naam,mobile,thikana,product_naam,note,order_date,delivery_charge,total_price,bill_number) VALUES (?,?,?,?,?,?,?,?,?)",
-                 (naam, mobile, thikana, product_naam, note, datetime.now().strftime("%d-%m-%Y %H:%M"), delivery_charge, total, bill_number))
+    conn = get_db()
+    conn.execute("""INSERT INTO orders 
+        (customer_naam,mobile,district,thana,area,product_list,note,order_date,delivery_charge,total_price,bill_number) 
+        VALUES (?,?,?,?,?,?,?,?,?,?,?)""",
+                 (naam, mobile, district, thana, area, product_names, note, 
+                  datetime.now().strftime("%d-%m-%Y %H:%M"), delivery_charge, total, bill_number))
     
     # স্টোক কমানো
-    conn.execute("UPDATE products SET stock = stock - 1 WHERE naam=?", (product_naam,))
+    for p in products:
+        conn.execute("UPDATE products SET stock = stock - ? WHERE naam=?", (p.get('qty', 1), p.get('name', '')))
+    
     conn.commit()
     conn.close()
     
-    log_activity("অর্ডার", f"{naam} - {product_naam} - {total} টাকা")
+    log_activity("অর্ডার", f"{naam} - {product_names} - {total} টাকা")
     return redirect("/?success=1")
 
 @app.route("/bill/<int:order_id>")
@@ -109,29 +124,72 @@ def generate_bill(order_id):
     if not row:
         return "অর্ডার পাওয়া যায়নি", 404
     
-    bill = f"""
-========================================
-       Mousumi's Gallery
-    📍 মুগদা, ঢাকা-১২১৪
-    📞 ০১৬৭৩৯৬৩৮৫২
-========================================
-বিল নম্বর: {row[7]}
-তারিখ: {row[6]}
-----------------------------------------
-গ্রাহক: {row[1]}
-মোবাইল: {row[2]}
-ঠিকানা: {row[3]}
-----------------------------------------
-পণ্য: {row[4]}
-মূল্য: {row[5]} টাকা
-ডেলিভারি চার্জ: {row[7]} টাকা
-----------------------------------------
-মোট: {row[8]} টাকা
-========================================
-        ধন্যবাদ! শুভ দিন। 😊
-========================================
-"""
-    return send_file(io.BytesIO(bill.encode('utf-8')), mimetype='text/plain', as_attachment=True, download_name=f"bill_{row[7]}.txt")
+    bill_html = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>বিল - Mousomi's Gallery</title>
+        <style>
+            body {{ font-family: 'Segoe UI', Arial, sans-serif; background: #f8f4f0; padding: 30px; }}
+            .bill-container {{ max-width: 600px; margin: 0 auto; background: #fff; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); padding: 40px; }}
+            .header {{ text-align: center; border-bottom: 2px solid #d43f5a; padding-bottom: 20px; margin-bottom: 20px; }}
+            .header h1 {{ color: #d43f5a; margin: 0; font-size: 2rem; }}
+            .header p {{ color: #666; margin: 5px 0; }}
+            .bill-details {{ margin: 20px 0; }}
+            .bill-details table {{ width: 100%; border-collapse: collapse; }}
+            .bill-details td {{ padding: 6px 0; }}
+            .bill-details .label {{ color: #666; font-weight: 600; }}
+            .items {{ margin: 20px 0; }}
+            .items table {{ width: 100%; border-collapse: collapse; }}
+            .items th {{ background: #d43f5a; color: #fff; padding: 10px; text-align: left; }}
+            .items td {{ padding: 8px 10px; border-bottom: 1px solid #eee; }}
+            .total {{ text-align: right; font-size: 1.2rem; font-weight: 700; color: #d43f5a; padding-top: 10px; border-top: 2px solid #d43f5a; margin-top: 10px; }}
+            .footer {{ text-align: center; color: #999; font-size: 0.8rem; margin-top: 30px; border-top: 1px solid #eee; padding-top: 15px; }}
+            .badge {{ display: inline-block; background: #25D366; color: #fff; padding: 2px 12px; border-radius: 20px; font-size: 0.7rem; }}
+        </style>
+    </head>
+    <body>
+        <div class="bill-container">
+            <div class="header">
+                <h1>🌸 Mousomi's Gallery</h1>
+                <p>📍 মুগদা, ঢাকা-১২১৪ | 📞 ০১৬৭৩৯৬৩৮৫২</p>
+                <p><span class="badge">বিল নম্বর: {row[10]}</span></p>
+            </div>
+            
+            <div class="bill-details">
+                <table>
+                    <tr><td class="label">তারিখ</td><td>{row[7]}</td></tr>
+                    <tr><td class="label">গ্রাহক</td><td>{row[1]}</td></tr>
+                    <tr><td class="label">মোবাইল</td><td>{row[2]}</td></tr>
+                    <tr><td class="label">জেলা</td><td>{row[3]}</td></tr>
+                    <tr><td class="label">থানা</td><td>{row[4]}</td></tr>
+                    <tr><td class="label">এলাকা</td><td>{row[5]}</td></tr>
+                </table>
+            </div>
+            
+            <div class="items">
+                <h4>📦 পণ্যের তালিকা</h4>
+                <table>
+                    <tr><th>পণ্য</th><th align="right">দাম</th></tr>
+                    {''.join([f"<tr><td>{item.strip()}</td><td align='right'>৳...</td></tr>" for item in row[6].split(',') if item.strip()])}
+                </table>
+            </div>
+            
+            <div class="total">
+                <p>ডেলিভারি চার্জ: ৳{row[8]}</p>
+                <p style="font-size:1.5rem;">মোট: ৳{row[9]}</p>
+            </div>
+            
+            <div class="footer">
+                <p>🙏 ধন্যবাদ! আপনার ব্যবসা আমাদের কাছে মূল্যবান।</p>
+                <p>© ২০২৬ Mousomi's Gallery</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+    return bill_html
 
 @app.route("/admin", methods=["GET", "POST"])
 def admin():
@@ -189,7 +247,7 @@ def admin_orders():
     conn = get_db()
     rows = conn.execute("SELECT * FROM orders ORDER BY id DESC").fetchall()
     conn.close()
-    orders = [{"id":r[0],"naam":r[1],"mobile":r[2],"thikana":r[3],"product":r[4],"note":r[5],"date":r[6],"delivery":r[7],"total":r[8],"bill":r[9]} for r in rows]
+    orders = [{"id":r[0],"naam":r[1],"mobile":r[2],"district":r[3],"thana":r[4],"area":r[5],"product":r[6],"note":r[7],"date":r[8],"delivery":r[9],"total":r[10],"bill":r[11]} for r in rows]
     return render_template("admin_orders.html", orders=orders)
 
 @app.route("/admin/report")
@@ -197,15 +255,11 @@ def admin_report():
     if not session.get("admin"):
         return redirect("/admin")
     conn = get_db()
-    # মোট অর্ডার
     total_orders = conn.execute("SELECT COUNT(*) FROM orders").fetchone()[0]
-    # মোট বিক্রি
     total_sales = conn.execute("SELECT SUM(total_price) FROM orders").fetchone()[0] or 0
-    # সব অ্যাক্টিভিটি
     logs = conn.execute("SELECT * FROM activity_log ORDER BY id DESC LIMIT 100").fetchall()
-    # ক্যাটাগরি ভিত্তিক বিক্রি
     cat_sales = conn.execute("""SELECT category, COUNT(orders.id) as count 
-        FROM products LEFT JOIN orders ON products.naam = orders.product_naam 
+        FROM products LEFT JOIN orders ON products.naam = orders.product_list 
         GROUP BY category""").fetchall()
     conn.close()
     return render_template("admin_report.html", 
