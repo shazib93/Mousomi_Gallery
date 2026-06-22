@@ -1,40 +1,61 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products - Admin</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>পণ্য তালিকা – Mousumi's Gallery</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    body { background: #fcf8f5; }
+    .admin-nav { background: #d43f5a; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+    .admin-nav span { color: #fff; font-size: 1.3rem; font-weight: 700; }
+    .admin-nav a { color: #fff; text-decoration: none; margin-left: 15px; padding: 6px 16px; border-radius: 30px; transition: 0.2s; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.4); }
+    .admin-nav a:hover { background: #fff; color: #d43f5a; }
+    .admin-nav .btn-outline-light:hover { background: #fff; color: #d43f5a; }
+    .product-admin-card { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06); transition:0.2s; height:100%; }
+    .product-admin-card:hover { transform:translateY(-3px); box-shadow:0 6px 20px rgba(0,0,0,0.10); }
+    .product-admin-card img { height:150px; object-fit:cover; width:100%; }
+    .product-admin-card .card-body { padding:12px; }
+    .product-admin-card .badge { background:#d43f5a; color:#fff; }
+    .stock-badge { background:#28a745; color:#fff; padding:2px 10px; border-radius:20px; font-size:0.7rem; }
+    .stock-badge.low { background:#ffc107; color:#000; }
+    .stock-badge.out { background:#dc3545; color:#fff; }
+  </style>
 </head>
 <body>
-<nav class="navbar navbar-dark" style="background:#c2185b;">
-    <div class="container-fluid">
-        <span class="navbar-brand">🌸 Mousumi Admin</span>
-        <div>
-            <a href="/admin/add" class="btn btn-light btn-sm me-2">+ পণ্য যোগ</a>
-            <a href="/admin/orders" class="btn btn-outline-light btn-sm me-2">অর্ডার</a>
-            <a href="/" class="btn btn-outline-light btn-sm me-2">Shop</a>
-            <a href="/admin/logout" class="btn btn-outline-light btn-sm">Logout</a>
-        </div>
-    </div>
+<nav class="admin-nav">
+  <span>🌸 Mousumi's Gallery</span>
+  <div>
+    <a href="/admin/add" class="btn-outline-light">+ পণ্য যোগ</a>
+    <a href="/admin/orders" class="btn-outline-light">অর্ডার</a>
+    <a href="/admin/report" class="btn-outline-light">📊 রিপোর্ট</a>
+    <a href="/" class="btn-outline-light">Shop</a>
+    <a href="/admin/logout" class="btn-outline-light">Logout</a>
+  </div>
 </nav>
 <div class="container mt-4">
-    <h5>সব পণ্য — মোট {{ products|length }}টি</h5>
-    <div class="row g-3 mt-1">
-        {% for p in products %}
-        <div class="col-6 col-md-3">
-            <div class="card">
-                <img src="{{ p.image_url }}" style="height:150px; object-fit:cover;" onerror="this.src='https://placehold.co/300x150?text=No+Image'">
-                <div class="card-body p-2">
-                    <p class="fw-bold small mb-1">{{ p.naam }}</p>
-                    <span class="badge bg-secondary mb-1">{{ p.category }}</span>
-                    <p class="text-danger fw-bold mb-2">৳{{ p.price }}</p>
-                    <a href="/admin/delete/{{ p.id }}" class="btn btn-danger btn-sm w-100" onclick="return confirm('মুছে দেবো?')">🗑️ মুছুন</a>
-                </div>
-            </div>
+  <h4>সব পণ্য — মোট {{ products|length }}টি</h4>
+  <div class="row g-3 mt-1">
+    {% for p in products %}
+    <div class="col-6 col-md-3">
+      <div class="product-admin-card">
+        <img src="{{ p.image_url }}" onerror="this.src='https://placehold.co/300x150/f4ede8/d43f5a?text=No+Image'">
+        <div class="card-body">
+          <p class="fw-bold small mb-1">{{ p.naam }}</p>
+          <span class="badge mb-1">{{ p.category }}</span>
+          <p class="text-danger fw-bold mb-1">৳{{ p.price }}</p>
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="stock-badge {% if p.stock == 0 %}out{% elif p.stock < 5 %}low{% endif %}">📦 {{ p.stock }} পিস</span>
+            {% if p.discount > 0 %}
+            <span class="badge bg-danger">🔥 {{ p.discount }}%</span>
+            {% endif %}
+          </div>
+          <a href="/admin/delete/{{ p.id }}" class="btn btn-danger btn-sm w-100" onclick="return confirm('মুছে দেবো?')">🗑️ মুছুন</a>
         </div>
-        {% endfor %}
+      </div>
     </div>
+    {% endfor %}
+  </div>
 </div>
 </body>
 </html>

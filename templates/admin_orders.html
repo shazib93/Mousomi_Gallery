@@ -1,46 +1,59 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>অর্ডার - Admin</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>অর্ডার – Mousumi's Gallery</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    body { background: #fcf8f5; }
+    .admin-nav { background: #d43f5a; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+    .admin-nav span { color: #fff; font-size: 1.3rem; font-weight: 700; }
+    .admin-nav a { color: #fff; text-decoration: none; padding: 6px 16px; border-radius: 30px; transition: 0.2s; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.4); }
+    .admin-nav a:hover { background: #fff; color: #d43f5a; }
+    .bill-btn { background: #28a745; color:#fff; padding:2px 12px; border-radius:20px; text-decoration:none; font-size:0.8rem; }
+    .bill-btn:hover { background:#1e7e34; color:#fff; }
+  </style>
 </head>
 <body>
-<nav class="navbar navbar-dark" style="background:#c2185b;">
-    <div class="container">
-        <span class="navbar-brand">🌸 অর্ডার তালিকা</span>
-        <a href="/admin/products" class="btn btn-outline-light btn-sm">← Products</a>
-    </div>
+<nav class="admin-nav">
+  <span>🌸 Mousumi's Gallery</span>
+  <div>
+    <a href="/admin/products">← Products</a>
+    <a href="/admin/report">📊 রিপোর্ট</a>
+  </div>
 </nav>
 <div class="container mt-4">
-    <h5>মোট অর্ডার: {{ orders|length }}টি</h5>
-    {% if orders %}
-    <div class="table-responsive mt-3">
-        <table class="table table-bordered table-hover table-sm">
-            <thead class="table-dark">
-                <tr>
-                    <th>#</th><th>নাম</th><th>মোবাইল</th><th>ঠিকানা</th><th>পণ্য</th><th>নোট</th><th>তারিখ</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for o in orders %}
-                <tr>
-                    <td>{{ o.id }}</td>
-                    <td>{{ o.naam }}</td>
-                    <td><a href="tel:{{ o.mobile }}">{{ o.mobile }}</a></td>
-                    <td>{{ o.thikana }}</td>
-                    <td>{{ o.product }}</td>
-                    <td>{{ o.note }}</td>
-                    <td>{{ o.date }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% else %}
-    <div class="text-center py-5 text-muted"><h5>এখনো কোনো অর্ডার নেই।</h5></div>
-    {% endif %}
+  <h4>মোট অর্ডার: {{ orders|length }}টি</h4>
+  {% if orders %}
+  <div class="table-responsive mt-3">
+    <table class="table table-bordered table-hover table-sm" style="background:#fff; border-radius:16px; overflow:hidden;">
+      <thead class="table-dark">
+        <tr>
+          <th>#</th><th>নাম</th><th>মোবাইল</th><th>ঠিকানা</th><th>পণ্য</th><th>নোট</th><th>ডেলিভারি</th><th>মোট</th><th>তারিখ</th><th>বিল</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for o in orders %}
+        <tr>
+          <td>{{ o.id }}</td>
+          <td>{{ o.naam }}</td>
+          <td><a href="tel:{{ o.mobile }}">{{ o.mobile }}</a></td>
+          <td>{{ o.thikana }}</td>
+          <td>{{ o.product }}</td>
+          <td>{{ o.note }}</td>
+          <td>৳{{ o.delivery }}</td>
+          <td><strong>৳{{ o.total }}</strong></td>
+          <td>{{ o.date }}</td>
+          <td><a href="/bill/{{ o.id }}" class="bill-btn" target="_blank">📄 বিল</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="text-center py-5 text-muted"><h5>এখনো কোনো অর্ডার নেই।</h5></div>
+  {% endif %}
 </div>
 </body>
 </html>

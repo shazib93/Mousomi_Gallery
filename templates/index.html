@@ -1,126 +1,277 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mousumi Gallary</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <style>
-        body { background:#f8f9fa; }
-        .top-bar { background:linear-gradient(135deg,#ff69b4,#c2185b); color:white; padding:20px; text-align:center; }
-        .top-bar h1 { font-size:1.8rem; font-weight:bold; margin:0; }
-        .top-bar p { margin:5px 0 0; font-size:0.9rem; }
-        .cat-btn { border-radius:50px; margin:3px; font-size:0.85rem; padding:5px 15px; }
-        .cat-btn.active { background:#c2185b; border-color:#c2185b; color:white; }
-        .product-card { border:none; border-radius:15px; box-shadow:0 2px 10px rgba(0,0,0,0.1); transition:transform 0.2s; overflow:hidden; height:100%; }
-        .product-card:hover { transform:translateY(-3px); }
-        .product-card img { width:100%; height:200px; object-fit:cover; }
-        .product-price { color:#c2185b; font-weight:bold; font-size:1.1rem; }
-        .order-btn { background:#25D366; color:white; border:none; border-radius:50px; padding:6px 15px; width:100%; font-size:0.85rem; }
-        .order-btn:hover { background:#1da851; color:white; }
-        .contact-bar { background:linear-gradient(135deg,#ff69b4,#c2185b); color:white; padding:30px 20px; text-align:center; }
-        .whatsapp-fixed { position:fixed; bottom:20px; right:20px; background:#25D366; color:white; border-radius:50px; padding:12px 20px; text-decoration:none; font-weight:bold; z-index:999; box-shadow:0 4px 15px rgba(0,0,0,0.3); }
-        footer { background:#333; color:#aaa; text-align:center; padding:15px; font-size:0.85rem; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mousumi's Gallery</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Roboto,sans-serif; }
+    body { background:#fcf8f5; color:#2d2a24; }
+    .top-banner { background:#1a1a1a; color:#ccc; text-align:center; padding:8px 12px; font-size:0.8rem; letter-spacing:1px; }
+    .top-banner a { color:#fff; margin:0 10px; }
+    .main-header { display:flex; justify-content:space-between; align-items:center; padding:16px 30px; background:#fff; border-bottom:1px solid #eee; flex-wrap:wrap; }
+    .logo { font-size:1.8rem; font-weight:300; color:#2d2a24; }
+    .logo span { font-weight:700; color:#d43f5a; }
+    .nav-links a { margin:0 14px; text-decoration:none; color:#2d2a24; font-weight:500; font-size:0.9rem; }
+    .nav-links a:hover { color:#d43f5a; }
+    .nav-icons i { font-size:1.2rem; margin-left:16px; color:#2d2a24; cursor:pointer; }
+    .nav-icons i:hover { color:#d43f5a; }
+    .hero { background:linear-gradient(145deg,#f4ede8,#e6dbd1); padding:50px 30px; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; }
+    .hero-text { flex:1 1 280px; }
+    .hero-text h1 { font-size:2.8rem; font-weight:300; line-height:1.2; }
+    .hero-text h1 strong { font-weight:700; color:#d43f5a; }
+    .hero-text p { font-size:1.1rem; margin:20px 0 30px; color:#4d4438; max-width:420px; }
+    .btn { background:#d43f5a; color:#fff; padding:12px 36px; border:none; border-radius:50px; font-weight:600; cursor:pointer; transition:0.2s; text-decoration:none; display:inline-block; }
+    .btn:hover { background:#b02c44; transform:scale(1.02); }
+    .hero-image { flex:1 1 280px; background:#d9cdbf; border-radius:30px; padding:40px 20px; text-align:center; color:#3e2c1b; font-size:2.5rem; min-height:200px; display:flex; align-items:center; justify-content:center; background-image:repeating-linear-gradient(45deg,#d6c5b5 0px,#d6c5b5 2px,#e6dbd1 2px,#e6dbd1 10px); }
+    .hero-image i { background:#fff; padding:20px; border-radius:60px; color:#2d2a24; }
+    .categories { display:flex; flex-wrap:wrap; justify-content:center; gap:20px; padding:50px 20px; background:#fff; }
+    .cat-card { background:#f4ede8; padding:15px 25px; border-radius:60px; font-weight:600; color:#2d2a24; box-shadow:0 2px 8px rgba(0,0,0,0.04); transition:0.2s; cursor:pointer; text-decoration:none; display:inline-block; }
+    .cat-card i { margin-right:10px; color:#d43f5a; }
+    .cat-card:hover { background:#d43f5a; color:#fff; transform:translateY(-3px); }
+    .cat-card:hover i { color:#fff; }
+    .cat-card.active { background:#d43f5a; color:#fff; }
+    .cat-card.active i { color:#fff; }
+    .section-title { text-align:center; font-size:2rem; font-weight:300; padding:40px 20px 10px; letter-spacing:2px; }
+    .section-title span { font-weight:700; color:#d43f5a; }
+    .product-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:25px; padding:20px 30px 50px; max-width:1200px; margin:0 auto; }
+    .product-card { background:#fff; border-radius:20px; overflow:hidden; box-shadow:0 4px 16px rgba(0,0,0,0.06); transition:0.3s; text-align:center; padding-bottom:16px; position:relative; }
+    .product-card:hover { transform:translateY(-6px) scale(1.02); box-shadow:0 10px 28px rgba(0,0,0,0.12); }
+    .product-img { height:220px; background:#e6dbd1; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; }
+    .product-img img { width:100%; height:100%; object-fit:cover; transition:0.4s; }
+    .product-card:hover .product-img img { transform:scale(1.08); }
+    .discount-badge { position:absolute; top:10px; left:10px; background:#ff4444; color:#fff; padding:4px 12px; border-radius:30px; font-size:0.8rem; font-weight:700; z-index:2; box-shadow:0 2px 8px rgba(255,68,68,0.3); }
+    .product-card h4 { margin:12px 0 4px; font-weight:600; }
+    .product-card .price { color:#d43f5a; font-weight:700; font-size:1.1rem; }
+    .product-card .old-price { text-decoration:line-through; color:#999; font-size:0.8rem; margin-left:8px; }
+    .product-card .stock { font-size:0.75rem; color:#666; margin:2px 0; }
+    .order-btn { background:linear-gradient(135deg,#25D366,#128C7E); color:#fff; border:none; padding:10px 20px; border-radius:50px; margin-top:8px; font-weight:700; cursor:pointer; transition:0.3s; box-shadow:0 2px 12px rgba(37,211,102,0.3); }
+    .order-btn:hover { transform:scale(1.05); box-shadow:0 4px 20px rgba(37,211,102,0.5); }
+    .rating { color:#FFD700; font-size:0.9rem; margin:4px 0; }
+    .rating .half { color:#ddd; }
+    .newsletter { background:#2d2a24; color:#f4ede8; padding:50px 30px; text-align:center; }
+    .newsletter h2 { font-weight:300; font-size:2rem; }
+    .newsletter h2 strong { color:#d43f5a; font-weight:600; }
+    .newsletter-box { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-top:20px; }
+    .newsletter-box input { padding:14px 24px; border-radius:60px; border:none; width:300px; max-width:80%; font-size:1rem; }
+    .newsletter-box button { padding:14px 34px; border-radius:60px; border:none; background:#d43f5a; color:#fff; font-weight:600; cursor:pointer; transition:0.2s; }
+    .newsletter-box button:hover { background:#b02c44; }
+    footer { background:#1a1a1a; color:#aaa; padding:40px 30px 20px; display:flex; flex-wrap:wrap; justify-content:space-between; }
+    footer .col { flex:1 1 160px; margin:10px 0; }
+    footer h4 { color:#fff; margin-bottom:12px; }
+    footer a { color:#aaa; display:block; text-decoration:none; margin:6px 0; font-size:0.9rem; }
+    footer a:hover { color:#fff; }
+    .payment-methods { display:flex; gap:15px; margin:10px 0; flex-wrap:wrap; }
+    .payment-methods img { height:30px; background:#fff; padding:4px 12px; border-radius:8px; }
+    .copyright { text-align:center; padding:20px 0 0; border-top:1px solid #333; margin-top:20px; width:100%; font-size:0.8rem; color:#666; }
+    .social i { font-size:1.4rem; margin-right:14px; color:#aaa; transition:0.2s; }
+    .social i:hover { color:#d43f5a; }
+    .whatsapp-fixed { position:fixed; bottom:20px; right:20px; background:#25D366; color:#fff; border-radius:50px; padding:12px 20px; text-decoration:none; font-weight:bold; z-index:999; box-shadow:0 4px 15px rgba(0,0,0,0.3); }
+    .whatsapp-fixed:hover { background:#1da851; color:#fff; }
+    .alert-success { background:#d4edda; color:#155724; padding:15px; border-radius:10px; margin:15px 30px; text-align:center; border-left:5px solid #28a745; }
+    .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center; }
+    .modal-content { background:#fff; max-width:450px; width:90%; border-radius:20px; padding:30px; position:relative; box-shadow:0 20px 60px rgba(0,0,0,0.2); }
+    .modal-close { position:absolute; top:15px; right:20px; font-size:1.8rem; cursor:pointer; color:#999; transition:0.2s; }
+    .modal-close:hover { color:#d43f5a; transform:rotate(90deg); }
+    .modal h4 { color:#d43f5a; margin-bottom:15px; font-size:1.3rem; }
+    .modal label { font-weight:600; font-size:0.9rem; color:#2d2a24; }
+    .modal input, .modal select, .modal textarea { width:100%; padding:12px 16px; border:1px solid #e0d6cc; border-radius:30px; margin-top:4px; margin-bottom:12px; font-size:0.95rem; transition:0.2s; background:#fcf8f5; }
+    .modal input:focus, .modal select:focus, .modal textarea:focus { border-color:#d43f5a; outline:none; box-shadow:0 0 0 3px rgba(212,63,90,0.1); }
+    .modal .btn-submit { width:100%; padding:14px; background:linear-gradient(135deg,#d43f5a,#b02c44); color:#fff; border:none; border-radius:50px; font-weight:700; font-size:1rem; cursor:pointer; transition:0.2s; }
+    .modal .btn-submit:hover { transform:scale(1.02); box-shadow:0 4px 20px rgba(212,63,90,0.3); }
+    @media (max-width:700px) { .main-header { flex-direction:column; gap:12px; } .nav-links a { margin:0 10px; font-size:0.8rem; } .hero-text h1 { font-size:2rem; } .product-grid { grid-template-columns:repeat(2,1fr); gap:12px; padding:10px; } }
+  </style>
 </head>
 <body>
 
-<div class="top-bar">
-    <h1>🌸 Mousumi Gallary House 🌸</h1>
-    <p>📍 মান্ডা কাজী বাড়ি, মুগদা, ঢাকা-১২১৪ &nbsp;|&nbsp; 📞 01673963852</p>
+<!-- Top Banner -->
+<div class="top-banner">
+  ✨ ফ্রি ডেলিভারি – অর্ডার করুন এখনই! ✨
+  <a href="#">অর্ডার ট্র্যাক</a> |
+  <a href="#">হেল্প</a>
 </div>
 
+<!-- Header -->
+<div class="main-header">
+  <div class="logo">Mousumi's <span>Gallery</span></div>
+  <div class="nav-links">
+    <a href="/">হোম</a>
+    <a href="/?cat=পোশাক">পোশাক</a>
+    <a href="/?cat=গহনা">গহনা</a>
+    <a href="/?cat=কসমেটিক্স">কসমেটিক্স</a>
+    <a href="/?cat=জুতা">জুতা</a>
+  </div>
+  <div class="nav-icons">
+    <i class="fas fa-search"></i>
+    <i class="fas fa-heart"></i>
+    <i class="fas fa-shopping-bag"></i>
+  </div>
+</div>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-text">
+    <h1>ঋতুর <strong>সৌন্দর্য</strong><br>তোমার হাতে</h1>
+    <p>হ্যান্ডপিকড ফ্যাশন, গহনা ও লাইফস্টাইল প্রোডাক্ট – শুধু Mousumi's Gallery-তে।</p>
+    <a href="#" class="btn">শপিং শুরু করো <i class="fas fa-arrow-right"></i></a>
+  </div>
+  <div class="hero-image">
+    <i class="fas fa-crown"></i> ২০২৬ কালেকশন
+  </div>
+</div>
+
+<!-- Success Message -->
 {% if success %}
-<div class="alert alert-success text-center m-3" role="alert">
-    ✅ আপনার অর্ডার গৃহীত হয়েছে! শীঘ্রই যোগাযোগ করা হবে।
+<div class="alert-success">
+  ✅ আপনার অর্ডার গৃহীত হয়েছে! <br>
+  <small>বিল ডাউনলোড করতে অ্যাডমিন প্যানেলে যান</small>
 </div>
 {% endif %}
 
-<div class="text-center py-3 bg-white border-bottom">
-    <a href="/" class="btn btn-outline-secondary cat-btn {% if not selected_cat %}active{% endif %}">🛍️ সব</a>
-    {% for cat in categories %}
-    <a href="/?cat={{ cat }}" class="btn btn-outline-secondary cat-btn {% if selected_cat == cat %}active{% endif %}">{{ cat }}</a>
-    {% endfor %}
+<!-- Categories -->
+<div class="categories">
+  <a href="/" class="cat-card {% if not selected_cat %}active{% endif %}"><i class="fas fa-th"></i> সব</a>
+  {% for cat in categories %}
+  <a href="/?cat={{ cat }}" class="cat-card {% if selected_cat == cat %}active{% endif %}"><i class="fas fa-tag"></i> {{ cat }}</a>
+  {% endfor %}
 </div>
 
-<div class="container py-4">
-    {% if products %}
-    <div class="row g-3">
-        {% for p in products %}
-        <div class="col-6 col-md-4 col-lg-3">
-            <div class="card product-card">
-                <img src="{{ p.image_url }}" alt="{{ p.naam }}" onerror="this.src='https://placehold.co/300x200?text=No+Image'">
-                <div class="card-body p-2">
-                    <p class="mb-1 fw-bold small">{{ p.naam }}</p>
-                    <p class="product-price mb-2">৳{{ p.price }}</p>
-                    <button class="order-btn" onclick="openOrder('{{ p.naam }}', {{ p.price }})">💬 অর্ডার করুন</button>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
+<!-- Products -->
+<h2 class="section-title">এই সপ্তাহের <span>বেস্টসেলার</span></h2>
+<div class="product-grid">
+  {% if products %}
+    {% for p in products %}
+    <div class="product-card">
+      <div class="product-img">
+        <img src="{{ p.image_url }}" alt="{{ p.naam }}" onerror="this.src='https://placehold.co/300x220/f4ede8/d43f5a?text=No+Image'">
+        {% if p.discount > 0 %}
+        <span class="discount-badge">🔥 {{ p.discount }}% ছাড়</span>
+        {% endif %}
+      </div>
+      <h4>{{ p.naam }}</h4>
+      <div class="rating">
+        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+        <span style="color:#999;font-size:0.7rem;">(12)</span>
+      </div>
+      <div class="price">৳{{ p.price }}
+        {% if p.discount > 0 %}
+        <span class="old-price">৳{{ (p.price * 100 / (100 - p.discount))|int }}</span>
+        {% endif %}
+      </div>
+      <div class="stock">📦 স্টোক: {{ p.stock }} পিস</div>
+      {% if p.stock > 0 %}
+      <button class="order-btn" onclick="openOrder('{{ p.naam }}', {{ p.price }})">💬 অর্ডার করুন</button>
+      {% else %}
+      <button class="order-btn" style="background:#ccc;cursor:not-allowed;">🚫 আউট অফ স্টোক</button>
+      {% endif %}
     </div>
-    {% else %}
-    <div class="text-center py-5 text-muted">
-        <h5>এই ক্যাটাগরিতে কোনো পণ্য নেই।</h5>
+    {% endfor %}
+  {% else %}
+    <div style="text-align:center; padding:40px; color:#999; grid-column:1/-1;">
+      <h4>এই ক্যাটাগরিতে কোনো পণ্য নেই।</h4>
     </div>
-    {% endif %}
+  {% endif %}
 </div>
 
 <!-- Order Modal -->
-<div class="modal fade" id="orderModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header" style="background:#c2185b; color:white;">
-                <h5 class="modal-title">📝 অর্ডার করুন</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <form method="POST" action="/order">
-                    <input type="hidden" name="product_naam" id="product_naam_input">
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">পণ্য</label>
-                        <input type="text" class="form-control" id="product_display" readonly style="background:#f0f0f0;">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">আপনার নাম *</label>
-                        <input type="text" class="form-control" name="naam" placeholder="পূর্ণ নাম" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">মোবাইল নম্বর *</label>
-                        <input type="tel" class="form-control" name="mobile" placeholder="01XXXXXXXXX" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">ঠিকানা *</label>
-                        <input type="text" class="form-control" name="thikana" placeholder="জেলা, থানা, এলাকা" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">নোট</label>
-                        <textarea class="form-control" name="note" rows="2" placeholder="সাইজ, রং বা অন্য তথ্য..."></textarea>
-                    </div>
-                    <button type="submit" class="btn w-100 py-2" style="background:#c2185b; color:white; border-radius:50px;">✅ অর্ডার কনফার্ম করুন</button>
-                </form>
-            </div>
-        </div>
+<div class="modal" id="orderModal">
+  <div class="modal-content">
+    <span class="modal-close" onclick="closeModal()">&times;</span>
+    <h4>📝 অর্ডার করুন</h4>
+    <form method="POST" action="/order">
+      <input type="hidden" name="product_naam" id="product_naam_input">
+      <div>
+        <label>পণ্য</label>
+        <input type="text" id="product_display" readonly style="background:#f0ebe6;">
+      </div>
+      <div>
+        <label>আপনার নাম *</label>
+        <input type="text" name="naam" required placeholder="পূর্ণ নাম">
+      </div>
+      <div>
+        <label>মোবাইল নম্বর *</label>
+        <input type="tel" name="mobile" required placeholder="01XXXXXXXXX">
+      </div>
+      <div>
+        <label>ঠিকানা *</label>
+        <input type="text" name="thikana" required placeholder="জেলা, থানা, এলাকা">
+      </div>
+      <div>
+        <label>ডেলিভারি এলাকা *</label>
+        <select name="delivery_area" required>
+          <option value="ঢাকার ভেতরে">ঢাকার ভেতরে (চার্জ ৮০ টাকা)</option>
+          <option value="ঢাকার বাইরে">ঢাকার বাইরে (চার্জ ১২০ টাকা)</option>
+        </select>
+      </div>
+      <div>
+        <label>নোট</label>
+        <textarea name="note" rows="2" placeholder="সাইজ, রং বা অন্য তথ্য..."></textarea>
+      </div>
+      <button type="submit" class="btn-submit">✅ অর্ডার কনফার্ম করুন</button>
+    </form>
+  </div>
+</div>
+
+<!-- Newsletter -->
+<div class="newsletter">
+  <h2><strong>আপডেট</strong> পেতে সাবস্ক্রাইব করো</h2>
+  <div class="newsletter-box">
+    <input type="email" placeholder="তোমার ইমেইল ঠিকানা">
+    <button>সাবস্ক্রাইব</button>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="col">
+    <h4>Mousumi's Gallery</h4>
+    <a href="#">আমাদের সম্পর্কে</a>
+    <a href="#">ক্যারিয়ার</a>
+    <a href="#">ব্লগ</a>
+  </div>
+  <div class="col">
+    <h4>সাপোর্ট</h4>
+    <a href="#">হেল্প সেন্টার</a>
+    <a href="#">রিটার্ন পলিসি</a>
+    <a href="#">ডেলিভারি</a>
+  </div>
+  <div class="col">
+    <h4>যোগাযোগ</h4>
+    <p>📞 ০১৬৭৩৯৬৩৮৫২</p>
+    <p>📍 মুগদা, ঢাকা</p>
+    <div class="social">
+      <i class="fab fa-facebook"></i>
+      <i class="fab fa-instagram"></i>
+      <i class="fab fa-youtube"></i>
     </div>
-</div>
+    <div class="payment-methods">
+      <span style="background:#f5f0eb;padding:4px 12px;border-radius:6px;">bKash</span>
+      <span style="background:#f5f0eb;padding:4px 12px;border-radius:6px;">Nagad</span>
+      <span style="background:#f5f0eb;padding:4px 12px;border-radius:6px;">Rocket</span>
+    </div>
+  </div>
+  <div class="copyright">
+    &copy; ২০২৬ Mousumi's Gallery – সর্বস্বত্ব সংরক্ষিত
+  </div>
+</footer>
 
-<div class="contact-bar">
-    <h4 class="mb-3">📞 যোগাযোগ করুন</h4>
-    <a href="https://wa.me/8801673963852" class="btn btn-light mb-2 px-5">💬 WhatsApp: 01673963852</a><br>
-    <a href="tel:01673963852" class="btn btn-outline-light px-5">📞 Call: 01673963852</a>
-    <p class="mt-3 mb-0">📍 মান্ডা কাজী বাড়ি, মুগদা, ঢাকা-১২১৪</p>
-</div>
-
-<footer><p class="mb-0">© 2026 Mousumi Gallary | সর্বস্বত্ব সংরক্ষিত</p></footer>
-
+<!-- WhatsApp Fixed -->
 <a href="https://wa.me/8801673963852" class="whatsapp-fixed">💬 WhatsApp</a>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 function openOrder(naam, price) {
-    document.getElementById("product_naam_input").value = naam;
-    document.getElementById("product_display").value = naam + " — ৳" + price;
-    new bootstrap.Modal(document.getElementById("orderModal")).show();
+  document.getElementById("product_naam_input").value = naam;
+  document.getElementById("product_display").value = naam + " — ৳" + price;
+  document.getElementById("orderModal").style.display = "flex";
+}
+function closeModal() {
+  document.getElementById("orderModal").style.display = "none";
+}
+window.onclick = function(e) {
+  if (e.target === document.getElementById("orderModal")) {
+    closeModal();
+  }
 }
 </script>
 </body>
