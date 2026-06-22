@@ -10,7 +10,6 @@ CATEGORIES = ["পোশাক", "গহনা", "কসমেটিক্স", 
 
 def get_db():
     conn = sqlite3.connect("mousumi.db")
-    # প্রোডাক্ট টেবিল – stock যোগ করা হলো
     conn.execute("""CREATE TABLE IF NOT EXISTS products (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         naam TEXT NOT NULL,
@@ -20,6 +19,7 @@ def get_db():
         stock INTEGER DEFAULT 10,
         discount INTEGER DEFAULT 0
     )""")
+    # ... বাকি কোড
     # অর্ডার টেবিল – delivery_charge যোগ করা হলো
     conn.execute("""CREATE TABLE IF NOT EXISTS orders (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
